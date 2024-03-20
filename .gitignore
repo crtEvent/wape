@@ -1,0 +1,9 @@
+/webapp/target/classes/*
+/webserver/target/classes/*
+/.idea/workspace.xml
+/.idea/vcs.xml
+/.idea/modules.xml
+/.idea/misc.xml
+/.idea/jarRepositories.xml
+/.idea/compiler.xml
+/.idea/checkstyle-idea.xml
