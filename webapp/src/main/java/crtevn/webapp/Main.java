@@ -1,13 +1,16 @@
 package crtevn.webapp;
 
+import crtevn.webapp.controller.MemberController;
 import crtevn.webserver.WebServer;
 
 public class Main {
 
     public static void main(String[] args) {
-        String staticResourcesPath = System.getProperty("user.dir") + "/webapp/src/main/resources/static";
+        String rootPath = System.getProperty("user.dir");
 
-        WebServer webServer = new WebServer(8080, staticResourcesPath);
+        WebServer webServer = new WebServer(8081, rootPath)
+            .addRouter(MemberController.class);
+
         webServer.start();
     }
 
