@@ -1,6 +1,7 @@
 package crtevn.webserver.http.application;
 
 import crtevn.webserver.Config;
+import crtevn.webserver.http.components.HttpMethod;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RouteMapper {
 
     private static RouteMapper instance;
-    private final Map<RouteKey, Method> routeMap;
+    private final Map<RouteKey, RouteValue> routeMap;
 
     private RouteMapper() {
         routeMap = new ConcurrentHashMap<>();
@@ -41,8 +42,16 @@ public class RouteMapper {
                     throw new IllegalArgumentException("Duplicate Route method and path.: " + routeKey);
                 }
 
-                routeMap.put(new RouteKey(route.method(), route.path()), method);
+                routeMap.put(new RouteKey(route.method(), route.path()), new RouteValue(clazz, method));
             }
         }
+    }
+
+    public RouteValue get(HttpMethod method, String requestTarget) {
+        return routeMap.get(new RouteKey(method, requestTarget));
+    }
+
+    public boolean match(HttpMethod method, String requestTarget) {
+        return routeMap.containsKey(new RouteKey(method, requestTarget));
     }
 }

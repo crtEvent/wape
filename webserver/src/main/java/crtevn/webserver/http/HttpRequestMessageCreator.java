@@ -38,6 +38,9 @@ public class HttpRequestMessageCreator {
         return lineByLine;
     }
 
+    /**
+     * request-line   = method SP request-target SP HTTP-version CRLF
+     */
     private static RequestLine createRequestLine(String startLine) {
         String[] components = startLine.split(" ");
 

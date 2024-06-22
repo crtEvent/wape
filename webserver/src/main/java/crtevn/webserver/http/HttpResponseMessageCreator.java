@@ -1,6 +1,10 @@
 package crtevn.webserver.http;
 
 import crtevn.webserver.Config;
+import crtevn.webserver.http.application.View;
+import crtevn.webserver.http.application.RouteMapper;
+import crtevn.webserver.http.application.RouteValue;
+import crtevn.webserver.http.components.HttpMethod;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,13 +12,28 @@ import java.nio.file.Paths;
 
 public class HttpResponseMessageCreator {
 
-    public static HttpResponseMessage create200ResponseMessage(
-        HttpRequestMessage httpRequestMessage)
-        throws IOException {
+    private static final RouteMapper routeMapper = RouteMapper.getInstance();
+
+    public static HttpResponseMessage create(HttpRequestMessage httpRequestMessage)
+        throws IOException
+    {
+        HttpMethod httpMethod = httpRequestMessage.getHttpMethod();
+        String requestTarget = httpRequestMessage.getRequestTarget();
+
+        if (routeMapper.match(httpMethod, requestTarget)) {
+            RouteValue routeValue = routeMapper.get(httpMethod, requestTarget);
+            View view = routeValue.runMethod();
+
+            return buildMessage(view.resourcePath());
+        } else {
+            return buildMessage(httpRequestMessage.getRequestTarget());
+        }
+    }
+
+    private static HttpResponseMessage buildMessage(String viewPath) throws IOException {
         StringBuilder headerFields = new StringBuilder();
 
-        Path path = Paths.get(
-            Config.getInstance().getStaticResourcesPath() + httpRequestMessage.getRequestTarget());
+        Path path = Paths.get(Config.getInstance().getStaticResourcesPath() + viewPath);
         byte[] messageBody = Files.readAllBytes(path);
 
         headerFields
