@@ -18,15 +18,15 @@ public class HttpResponseMessageCreator {
         throws IOException
     {
         HttpMethod httpMethod = httpRequestMessage.getHttpMethod();
-        String requestTarget = httpRequestMessage.getRequestTarget();
+        String requestTarget = httpRequestMessage.getRequestTargetWithoutQueryString();
 
         if (routeMapper.match(httpMethod, requestTarget)) {
             RouteValue routeValue = routeMapper.get(httpMethod, requestTarget);
-            View view = routeValue.runMethod();
+            View view = routeValue.runMethod(httpRequestMessage);
 
             return buildMessage(view.resourcePath());
         } else {
-            return buildMessage(httpRequestMessage.getRequestTarget());
+            return buildMessage(requestTarget);
         }
     }
 

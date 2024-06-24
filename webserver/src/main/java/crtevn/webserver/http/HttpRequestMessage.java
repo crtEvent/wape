@@ -15,11 +15,19 @@ public class HttpRequestMessage {
     }
 
     public HttpMethod getHttpMethod() {
-        return HttpMethod.from(requestLine.method());
+        return HttpMethod.from(requestLine.getMethod());
     }
 
     public String getRequestTarget() {
-        return requestLine.requestTarget();
+        return requestLine.getRequestTarget();
+    }
+
+    public String getRequestTargetWithoutQueryString() {
+        return requestLine.getRequestTargetWithoutQueryString();
+    }
+
+    public String[] getQueryParameter(String name) {
+        return requestLine.getQueryParam(name);
     }
 
     @Override
