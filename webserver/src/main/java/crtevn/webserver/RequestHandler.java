@@ -22,7 +22,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequestMessage httpRequestMessage = HttpRequestMessageCreator.createFromInputStream(in);
 
-            HttpResponseMessage httpResponseMessage = HttpResponseMessageCreator.create200ResponseMessage(httpRequestMessage);
+            HttpResponseMessage httpResponseMessage = HttpResponseMessageCreator.create(httpRequestMessage);
 
             ResponseHandler responseHandler = new ResponseHandler(out, httpResponseMessage);
             responseHandler.flush();

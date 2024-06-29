@@ -4,13 +4,15 @@ public class Config {
 
     private static Config instance;
 
-    private final int port;
-    private final String staticResourcesPath;
+    private static final String staticResourcePath = "/webapp/src/main/resources/static";
 
-    private Config(final int port, final String staticResourcesPath) {
+    private final int port;
+    private final String rootPath;
+
+    private Config(final int port, final String rootPath) {
         verifyPort(port);
         this.port = port;
-        this.staticResourcesPath = staticResourcesPath;
+        this.rootPath = rootPath;
     }
 
     public static synchronized Config initialize(final int port, final String staticResourcesPath) {
@@ -24,7 +26,8 @@ public class Config {
 
     public static Config getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("Config is not initialized yet. Please call initialize() first.");
+            throw new IllegalStateException(
+                "Config is not initialized yet. Please call initialize() first.");
         }
         return instance;
     }
@@ -44,6 +47,6 @@ public class Config {
     }
 
     public String getStaticResourcesPath() {
-        return staticResourcesPath;
+        return rootPath + staticResourcePath;
     }
 }

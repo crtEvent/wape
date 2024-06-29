@@ -1,5 +1,6 @@
 package crtevn.webserver;
 
+import crtevn.webserver.http.application.RouteMapper;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,9 +8,17 @@ import java.net.Socket;
 public class WebServer {
 
     private final Config config;
+    private final RouteMapper routeMapper;
 
     public WebServer(int port, String staticResourcesPath) {
         config = Config.initialize(port, staticResourcesPath);
+        routeMapper = RouteMapper.initialize();
+    }
+
+    public WebServer addRouter(Class<?> clazz) {
+        routeMapper.add(clazz);
+
+        return this;
     }
 
     public void start() {
