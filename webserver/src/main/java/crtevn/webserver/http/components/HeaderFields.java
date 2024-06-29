@@ -1,23 +1,23 @@
 package crtevn.webserver.http.components;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class HeaderFields {
 
-    private static final int HEADER_FIELD_COMPONENTS_NUMBER = 2;
     private static final String CONTENT_LENGTH = "Content-Length";
 
     /**
      * In the map, the key is the field-name, and the value is the field-value.
      */
-    private final Map<String, String> headerFields;
+    private final Map<String, String> headerFields = new LinkedHashMap<>();
 
-    public HeaderFields(Map<String, String> headerFields) {
-        this.headerFields = headerFields;
+    public void put(String fieldName, String fieldValue) {
+        headerFields.put(fieldName, fieldValue);
     }
 
-    public String getFieldValue(String fieldName) {
+    public String get(String fieldName) {
         String fieldValue = this.headerFields.get(fieldName);
         return fieldValue != null ? fieldValue : "";
     }

@@ -30,6 +30,10 @@ public class HttpRequestMessage {
         return requestLine.getQueryParam(name);
     }
 
+    public String getHttpVersion() {
+        return requestLine.getHttpVersion();
+    }
+
     @Override
     public String toString() {
         return requestLine.toString()

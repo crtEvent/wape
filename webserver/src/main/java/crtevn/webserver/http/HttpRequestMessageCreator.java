@@ -53,17 +53,17 @@ public class HttpRequestMessageCreator {
     }
 
     private static HeaderFields createHeaderFields(List<String> headerFields) {
-        Map<String, String> map = new LinkedHashMap<>();
+        HeaderFields newHeaderFields = new HeaderFields();
         for (String headerField : headerFields) {
             String[] components = headerField.split(":\\s?", 2);
             if (components.length != HEADER_FIELD_COMPONENTS_NUMBER) {
                 throw new IllegalArgumentException("The number of header field components does not match.");
             }
 
-            map.put(components[0], components[1].trim());
+            newHeaderFields.put(components[0], components[1].trim());
         }
 
-        return new HeaderFields(map);
+        return newHeaderFields;
     }
 
 }

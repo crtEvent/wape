@@ -1,7 +1,5 @@
 package crtevn.webserver.http.components;
 
-import java.util.Optional;
-
 public class RequestLine {
 
     private final String method;
