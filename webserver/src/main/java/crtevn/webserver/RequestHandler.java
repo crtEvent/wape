@@ -20,7 +20,7 @@ public class RequestHandler implements Runnable {
     @Override
     public void run() {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequestMessage httpRequestMessage = HttpRequestMessageCreator.createFromInputStream(in);
+            HttpRequestMessage httpRequestMessage = HttpRequestMessageCreator.create(in);
 
             HttpResponseMessage httpResponseMessage = HttpResponseMessageCreator.create(httpRequestMessage);
 

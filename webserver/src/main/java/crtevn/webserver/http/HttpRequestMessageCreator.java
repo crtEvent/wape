@@ -17,7 +17,7 @@ public class HttpRequestMessageCreator {
     private static final int START_LINE_COMPONENTS_NUMBER = 3;
     private static final int HEADER_FIELD_COMPONENTS_NUMBER = 2;
 
-    public static HttpRequestMessage createFromInputStream(InputStream in) throws IOException {
+    public static HttpRequestMessage create(InputStream in) throws IOException {
         List<String> lineByLine = readLinesFromInputStream(in);
 
         RequestLine requestLine = createRequestLine(lineByLine.get(0));
