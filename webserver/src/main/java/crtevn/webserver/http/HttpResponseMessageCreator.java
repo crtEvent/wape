@@ -7,7 +7,7 @@ import crtevn.webserver.http.application.RouteValue;
 import crtevn.webserver.http.components.HeaderFields;
 import crtevn.webserver.http.components.HttpMethod;
 import crtevn.webserver.http.components.HttpStatus;
-import crtevn.webserver.http.components.MessageBody;
+import crtevn.webserver.http.components.ResponseBody;
 import crtevn.webserver.http.components.StatusLine;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,26 +30,26 @@ public class HttpResponseMessageCreator {
             View view = routeValue.runMethod(httpRequestMessage);
 
             StatusLine statusLine;
-            MessageBody messageBody;
+            ResponseBody responseBody;
             HeaderFields headerFields;
             if (view.isRedirect()) {
                 statusLine = createStatusLine(httpRequestMessage.getHttpVersion(), HttpStatus.FOUND);
-                messageBody = createMessageBody(null);
-                headerFields = createDefaultHeaderFields(messageBody);
+                responseBody = createMessageBody(null);
+                headerFields = createDefaultHeaderFields(responseBody);
                 headerFields.put("Location", view.getResourcePath());
             } else {
                 statusLine = createStatusLine(httpRequestMessage.getHttpVersion(), HttpStatus.OK);
-                messageBody = createMessageBody(view.getResourcePath());
-                headerFields = createDefaultHeaderFields(messageBody);
+                responseBody = createMessageBody(view.getResourcePath());
+                headerFields = createDefaultHeaderFields(responseBody);
             }
 
-            return new HttpResponseMessage(statusLine, headerFields, messageBody);
+            return new HttpResponseMessage(statusLine, headerFields, responseBody);
         } else {
             StatusLine statusLine = createStatusLine(httpRequestMessage.getHttpVersion(), HttpStatus.OK);
-            MessageBody messageBody = createMessageBody(requestTarget);
-            HeaderFields headerFields = createDefaultHeaderFields(messageBody);
+            ResponseBody responseBody = createMessageBody(requestTarget);
+            HeaderFields headerFields = createDefaultHeaderFields(responseBody);
 
-            return new HttpResponseMessage(statusLine, headerFields, messageBody);
+            return new HttpResponseMessage(statusLine, headerFields, responseBody);
         }
     }
 
@@ -66,10 +66,10 @@ public class HttpResponseMessageCreator {
      *
      * OWS means optional trailing whitespace.
      */
-    private static HeaderFields createDefaultHeaderFields(MessageBody messageBody) {
+    private static HeaderFields createDefaultHeaderFields(ResponseBody responseBody) {
         HeaderFields headerFields = new HeaderFields();
         headerFields.put("Content-Type", "text/html;charset=utf-8");
-        headerFields.put("Content-Length", String.valueOf(messageBody.getLength()));
+        headerFields.put("Content-Length", String.valueOf(responseBody.getLength()));
 
         return headerFields;
     }
@@ -77,12 +77,12 @@ public class HttpResponseMessageCreator {
     /**
      * message-body = *OCTET
      */
-    private static MessageBody createMessageBody(String viewPath) throws IOException {
+    private static ResponseBody createMessageBody(String viewPath) throws IOException {
         if (viewPath == null || viewPath.isEmpty()) {
-            return new MessageBody(new byte[]{});
+            return new ResponseBody(new byte[]{});
         }
 
         Path path = Paths.get(Config.getInstance().getStaticResourcesPath() + viewPath);
-        return new MessageBody(Files.readAllBytes(path));
+        return new ResponseBody(Files.readAllBytes(path));
     }
 }

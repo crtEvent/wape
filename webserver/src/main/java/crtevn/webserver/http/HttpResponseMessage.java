@@ -1,7 +1,7 @@
 package crtevn.webserver.http;
 
 import crtevn.webserver.http.components.HeaderFields;
-import crtevn.webserver.http.components.MessageBody;
+import crtevn.webserver.http.components.ResponseBody;
 import crtevn.webserver.http.components.StatusLine;
 import java.nio.charset.StandardCharsets;
 
@@ -9,13 +9,13 @@ public class HttpResponseMessage {
 
     private final StatusLine statusLine;
     private final HeaderFields headerFields;
-    private final MessageBody messageBody;
+    private final ResponseBody responseBody;
 
     public HttpResponseMessage(StatusLine statusLine, HeaderFields headerFields,
-        MessageBody messageBody) {
+        ResponseBody responseBody) {
         this.statusLine = statusLine;
         this.headerFields = headerFields;
-        this.messageBody = messageBody;
+        this.responseBody = responseBody;
     }
 
     public String getStatusLine() {
@@ -27,12 +27,12 @@ public class HttpResponseMessage {
     }
 
     public byte[] getMessageBody() {
-        return messageBody.getMessageBody();
+        return responseBody.getMessageBody();
     }
 
     @Override
     public String toString() {
-        if (messageBody.isEmpty()) {
+        if (responseBody.isEmpty()) {
             return getStatusLine()
                 + getHeaderFields();
         } else {
@@ -41,6 +41,5 @@ public class HttpResponseMessage {
                 + System.lineSeparator()
                 + new String(getMessageBody(), StandardCharsets.UTF_8);
         }
-
     }
 }

@@ -1,10 +1,10 @@
 package crtevn.webserver.http.components;
 
-public class MessageBody {
+public class ResponseBody {
 
     private final byte[] messageBody;
 
-    public MessageBody(byte[] messageBody) {
+    public ResponseBody(byte[] messageBody) {
         this.messageBody = messageBody;
     }
 
