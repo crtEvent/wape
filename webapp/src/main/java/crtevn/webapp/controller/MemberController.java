@@ -20,11 +20,11 @@ public class MemberController {
         return new View("/sign-in.html");
     }
 
-    @Route(path = "/do-login", method = HttpMethod.GET)
+    @Route(path = "/do-login", method = HttpMethod.POST)
     public View doLogin(HttpRequestMessage httpRequestMessage) {
 
-        String email = httpRequestMessage.getQueryParameter("email")[0];
-        String pw = httpRequestMessage.getQueryParameter("password")[0];
+        String email = httpRequestMessage.getBodyParameter("email")[0];
+        String pw = httpRequestMessage.getBodyParameter("password")[0];
 
         Optional<Member> member = memberRepository.findById(email);
 
