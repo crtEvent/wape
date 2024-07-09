@@ -1,6 +1,7 @@
 package crtevn.webserver.http;
 
 import crtevn.webserver.http.components.HeaderFields;
+import crtevn.webserver.http.components.RequestBody;
 import crtevn.webserver.http.components.RequestLine;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,34 +9,31 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HttpRequestMessageCreator {
 
     private static final int START_LINE_COMPONENTS_NUMBER = 3;
     private static final int HEADER_FIELD_COMPONENTS_NUMBER = 2;
 
-    public static HttpRequestMessage createFromInputStream(InputStream in) throws IOException {
-        List<String> lineByLine = readLinesFromInputStream(in);
-
-        RequestLine requestLine = createRequestLine(lineByLine.get(0));
-        HeaderFields headerFields = createHeaderFields(lineByLine.subList(1, lineByLine.size()));
-
-        return new HttpRequestMessage(requestLine, headerFields);
-    }
-
-    private static List<String> readLinesFromInputStream(InputStream in) throws IOException {
+    public static HttpRequestMessage create(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        List<String> lineByLine = new ArrayList<>();
 
+        RequestLine requestLine = createRequestLine(br.readLine());
+
+        List<String> headers = new ArrayList<>();
         String line;
         while ((line = br.readLine()) != null && !line.isEmpty()) {
-            lineByLine.add(line);
+            headers.add(line);
         }
+        HeaderFields headerFields = createHeaderFields(headers);
 
-        return lineByLine;
+        long contentLength = headerFields.getContentLength();
+        char[] body = new char[(int) contentLength];
+        int read = br.read(body);
+        RequestBody requestBody = new RequestBody(new String(body));
+
+        return new HttpRequestMessage(requestLine, headerFields, requestBody);
     }
 
     /**

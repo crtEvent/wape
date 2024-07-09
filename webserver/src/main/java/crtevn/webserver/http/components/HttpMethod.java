@@ -1,7 +1,7 @@
 package crtevn.webserver.http.components;
 
 public enum HttpMethod {
-    GET;
+    GET, POST;
 
     public static HttpMethod from(String method) {
         for (HttpMethod element : HttpMethod.values()) {

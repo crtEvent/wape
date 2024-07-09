@@ -6,8 +6,6 @@ import java.util.Map.Entry;
 
 public class HeaderFields {
 
-    private static final String CONTENT_LENGTH = "Content-Length";
-
     /**
      * In the map, the key is the field-name, and the value is the field-value.
      */
@@ -22,8 +20,13 @@ public class HeaderFields {
         return fieldValue != null ? fieldValue : "";
     }
 
+    public String get(HttpHeaders httpHeaders) {
+        String fieldValue = this.headerFields.get(httpHeaders.getFieldName());
+        return fieldValue != null ? fieldValue : "";
+    }
+
     public long getContentLength() {
-        String contentLength = this.headerFields.get(CONTENT_LENGTH);
+        String contentLength = get(HttpHeaders.CONTENT_LENGTH);
 
         try {
             return Long.parseLong(contentLength);
